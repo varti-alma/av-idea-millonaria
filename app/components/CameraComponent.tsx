@@ -9,8 +9,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
+import { useNavigate } from "@remix-run/react";
 
 function CameraComponent({ registrar }: { registrar: boolean }) {
   const videoRef = useRef(null);
@@ -18,6 +18,11 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [photoTaken, setPhotoTaken] = useState(false);
   const [validation, setValidation] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
+  const [dialogTitle, setDialogTitle] = useState("");
+
+  const navigate = useNavigate();
 
   const startCamera = async () => {
     try {
@@ -52,12 +57,23 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
 
   const validarFoto = () => {
     registrar ? alert("Guardando..") : alert("Validando...");
-    setValidation(true);
+    //aca va a invocación de la api de guardado de imagen
     if (validation) {
+      setValidation(true);
       alert("Registro guardado exitosamente");
+      setDialogTitle("Registro guardado exitosamente");
+      setDialogMessage("Registro guardado exitosamente");
     } else {
-      alert("Error en almacenar registro. ¿Desea registrarse manualmente?");
+      setShowDialog(true);
+      setDialogTitle("Error al guardar registro");
+      setDialogMessage(
+        "Error en almacenar registro. ¿Desea registrarse manualmente?"
+      );
     }
+  };
+
+  const navigarManual = () => {
+    navigate("/manual-capture");
   };
 
   return (
@@ -102,19 +118,23 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
         )}
         <canvas ref={canvasRef} style={{ width: "100%" }}></canvas>
       </div>
-      <AlertDialog>
-        <AlertDialogTrigger>Open</AlertDialogTrigger>
+      <AlertDialog open={showDialog}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </AlertDialogDescription>
+            <AlertDialogTitle
+              className={validation ? "text-green-600" : "text-red-600"}
+            >
+              {dialogTitle}
+            </AlertDialogTitle>
+            <AlertDialogDescription>{dialogMessage}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Continue</AlertDialogAction>
+            <AlertDialogCancel onClick={() => setShowDialog(false)}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={navigarManual}>
+              Ir a guardado manual
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
