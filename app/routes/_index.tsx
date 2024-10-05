@@ -2,7 +2,6 @@ import type { MetaFunction } from "@remix-run/node";
 import { Button } from "app/components/ui/button";
 import { Input } from "app/components/ui/input";
 import { Label } from "app/components/ui/label";
-import { AlertDialog } from "app/components/ui/alert-dialog";
 import { useEffect, useRef, useState } from "react";
 import CameraComponent from "~/components/CameraComponent";
 
@@ -30,7 +29,7 @@ export default function Index() {
         {optionSelected ? (
           registrar ? (
             <>
-              <CameraComponent />
+              <CameraComponent registrar={registrar} />
               <Button
                 onClick={() => {
                   setOptionSelected(false);
