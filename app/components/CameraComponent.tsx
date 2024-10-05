@@ -42,7 +42,6 @@ function CameraComponent() {
   const capturePhoto = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    debugger;
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const context = canvas.getContext("2d");
@@ -69,12 +68,10 @@ function CameraComponent() {
         <Button onClick={startCamera}>Encender cámara</Button>
       )}
 
-      {photoTaken && (
-        <div>
-          <h2>Foto tomada:</h2>
-          <canvas ref={canvasRef} style={{ width: "100%", border:1px; }}></canvas>
-        </div>
-      )}
+      <div>
+        {photoTaken && <h2>Foto tomada:</h2>}
+        <canvas ref={canvasRef} style={{ width: "100%" }}></canvas>
+      </div>
     </div>
   );
 }
