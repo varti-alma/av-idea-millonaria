@@ -56,8 +56,39 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
     setPhotoTaken(photoData);
   };
 
+  const [response, setResponse] = useState(null);
+
+  const sendImageToApi = async (imgvalidacion) => {
+    try {
+        const res = await fetch("https://y3yoims0y3.execute-api.us-east-2.amazonaws.com/PruebaReconocimiento", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ imgvalidacion }),
+        });
+
+        const data = await res.json();
+        console.log("Solicitud enviada");
+        console.log(data);
+        setResponse(data);
+        console.log(response);
+
+        // Verificar la respuesta
+        if (data.body.codigo === 0) {
+            alert("Usted es: " + data.body.similutud);
+        } else {
+            alert("Error: " + data.body.descripcion);
+        }
+    } catch (error) {
+        console.error("Error al enviar la solicitud:", error);
+    }
+  };
+
   const validarFoto = () => {
-    registrar ? alert("Guardando..") : alert("Validando...");
+    //registrar ? alert("Guardando..") : alert("Validando...");
+    console.log(photoTaken);
+    registrar ? alert("Guardando..") : sendImageToApi(photoTaken);
     //aca va a invocación de la api de guardado de imagen
     if (validation) {
       setValidation(true);
