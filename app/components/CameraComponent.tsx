@@ -57,6 +57,7 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
 
   const validarFoto = () => {
     registrar ? alert("Guardando..") : alert("Validando...");
+    //aca va a invocación de la api de guardado de imagen
     if (validation) {
       setValidation(true);
       alert("Registro guardado exitosamente");
@@ -72,7 +73,6 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
   };
 
   const navigarManual = () => {
-    alert("holi");
     navigate("/manual-capture");
   };
 

@@ -34,6 +34,7 @@ export default function Index() {
 
   const captureData = () => {
     registrar ? alert("Guardando..") : alert("Validando...");
+    //aca va a invocación de la api de guardado a la base de datos
     if (validation) {
       setValidation(true);
       setDialogTitle("Registro guardado exitosamente");
