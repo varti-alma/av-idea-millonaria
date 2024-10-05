@@ -19,8 +19,8 @@ export type User = {
 export type Liveness = {
     id?: string;
     id_user: string;
-    start_date: Date;
-    end_date: Date;
+    initialDate: Date;
+    finishDate: Date;
     result: boolean;
     ip_address: string;
     token_session: string;
@@ -33,3 +33,19 @@ export type LivenessResult = {
     action_type: string;
     action_result: boolean;
 };
+
+export type GetUser = {
+    data: string;
+}
+
+export type CreateUser = {
+    body : User
+}
+
+export type CreateLiveness = {
+    body : Liveness
+}
+
+export type CreateLivenessResult = {
+    body : LivenessResult
+}
