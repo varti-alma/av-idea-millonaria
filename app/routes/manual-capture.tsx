@@ -3,7 +3,16 @@ import type { MetaFunction } from "@remix-run/node";
 import { Button } from "app/components/ui/button";
 import { Input } from "app/components/ui/input";
 import { Label } from "app/components/ui/label";
-import { AlertDialog } from "app/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "~/components/ui/alert-dialog";
 import { useNavigate } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
@@ -13,11 +22,29 @@ export const meta: MetaFunction = () => {
   ];
 };
 export default function Index() {
-  const [validation, setValidation] = useState(false);
+  const [validation, setValidation] = useState(true);
+  const [registrar, setRegistrar] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
+  const [dialogTitle, setDialogTitle] = useState("");
+  const [documentId, setDocumentId] = useState("");
+  const [serialNumber, setSerialNumber] = useState("");
+
   const navigate = useNavigate();
 
   const captureData = () => {
-    alert("capture face");
+    registrar ? alert("Guardando..") : alert("Validando...");
+    if (validation) {
+      setValidation(true);
+      setDialogTitle("Registro guardado exitosamente");
+      setDialogMessage("Registro guardado exitosamente");
+    } else {
+      setDialogTitle("Error al guardar registro");
+      setDialogMessage(
+        "Error en almacenar registro. ¿Desea registrarse manualmente?"
+      );
+    }
+    setShowDialog(true);
   };
 
   return (
@@ -29,21 +56,61 @@ export default function Index() {
             Ingreso del formulario para meter info del carnet
           </h1>
         </header>
-
-        <AlertDialog />
-        <Button onClick={captureData}>Ingresar datos de cédula</Button>
         <div>
-          <Label> RUT / Pasaporte</Label>
-          <Input name="" placeholder="Ingrese su rut sin puntos ni guión" />
+          <div>
+            <Label> RUT / Pasaporte</Label>
+            <Input
+              value={documentId}
+              name="documentId"
+              placeholder="Ingrese su rut sin puntos ni guión"
+              onChange={(e) => {
+                setDocumentId(e.target.value);
+              }}
+            />
+          </div>
+          <div className="mt-5">
+            <Label> Número de seguridad </Label>
+            <Input
+              value={serialNumber}
+              name="securityNumber"
+              onChange={(e) => {
+                setSerialNumber(e.target.value);
+              }}
+            />
+          </div>
         </div>
         <div>
-          <Label> Número de seguridad </Label>
-          <Input name="" />
+          <Button
+            variant="secondary"
+            className="mt-5"
+            onClick={() => navigate(-1)}
+          >
+            Volver
+          </Button>
+          <Button onClick={captureData} className="ml-5">
+            Guardar
+          </Button>
         </div>
       </div>
-      <Button className="mt-5" onClick={() => navigate(-1)}>
-        Volver
-      </Button>
+      <AlertDialog open={showDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle
+              className={validation ? "text-green-600" : "text-red-600"}
+            >
+              {dialogTitle}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {dialogMessage} {serialNumber} {documentId}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowDialog(false)}>
+              Cerrar
+            </AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

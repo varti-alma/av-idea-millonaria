@@ -31,6 +31,7 @@ export default function Index() {
             <>
               <CameraComponent registrar={registrar} />
               <Button
+                variant="secondary"
                 onClick={() => {
                   setOptionSelected(false);
                 }}
@@ -42,6 +43,7 @@ export default function Index() {
             <>
               <p>validación de persona</p>
               <Button
+                variant="secondary"
                 onClick={() => {
                   setOptionSelected(false);
                 }}
