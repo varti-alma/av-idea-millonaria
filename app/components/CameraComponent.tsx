@@ -6,6 +6,7 @@ function CameraComponent() {
   const canvasRef = useRef(null);
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [photoTaken, setPhotoTaken] = useState(false);
+  const [validation, setValidation] = useState(false);
 
   const startCamera = async () => {
     try {
@@ -26,19 +27,6 @@ function CameraComponent() {
     setPhotoTaken(false);
   };
 
-  const takePhoto = () => {
-    const canvas = canvasRef?.current;
-    const context = canvas?.getContext("2d");
-    const video = videoRef.current;
-    debugger;
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    setPhotoTaken(true);
-  };
-
   const capturePhoto = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -47,29 +35,45 @@ function CameraComponent() {
     const context = canvas.getContext("2d");
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
     const photoData = canvas.toDataURL("image/png");
-    setPhoto(photoData);
+    setPhotoTaken(photoData);
+  };
+
+  const validarFoto = () => {
+    alert("validando");
+    setValidation(true);
   };
 
   return (
-    <div>
-      <h1>Cámara en React</h1>
-      {isCameraOn ? (
-        <div>
+    <div className="flex flex-col items-center justify-center">
+      {isCameraOn && !photoTaken ? (
+        <div className="flex flex-col">
           <video
             ref={videoRef}
             autoPlay
             playsInline
             style={{ width: "100%" }}
           />
-          <Button onClick={capturePhoto}>Tomar foto</Button>
-          <Button onClick={stopCamera}>Apagar cámara</Button>
+          <div className="flex justify-around my-2">
+            <Button onClick={capturePhoto}>Tomar foto</Button>
+            <Button onClick={stopCamera}>Validar imagen</Button>
+          </div>
         </div>
+      ) : photoTaken ? (
+        <Button onClick={validarFoto} className="mx-auto">
+          Validar
+        </Button>
       ) : (
-        <Button onClick={startCamera}>Encender cámara</Button>
+        <Button onClick={startCamera} className="mx-auto">
+          Iniciar captura
+        </Button>
       )}
 
       <div>
-        {photoTaken && <h2>Foto tomada:</h2>}
+        {photoTaken && (
+          <div>
+            <h2>Foto tomada:</h2>
+          </div>
+        )}
         <canvas ref={canvasRef} style={{ width: "100%" }}></canvas>
       </div>
     </div>

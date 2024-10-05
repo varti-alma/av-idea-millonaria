@@ -12,16 +12,6 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
-const captureFace = () => {
-  if ("mediaDevices" in navigator && "getUserMedia" in navigator.mediaDevices) {
-    alert("Let's get this party started");
-  }
-  alert("capture face");
-};
-
-const captureCI = () => {
-  alert("capture CI");
-};
 
 export default function Index() {
   return (
@@ -33,9 +23,6 @@ export default function Index() {
             Captura de cédula
           </h1>
         </header>
-        <div>
-          <Button onClick={captureFace}>Capture</Button>
-        </div>
         <AlertDialog />
         <CameraComponent />
       </div>
