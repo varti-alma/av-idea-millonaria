@@ -72,7 +72,7 @@ const Validate = () => {
             />
           </PopoverContent>
         </Popover>
-        {event && idNumber && date && <CameraComponent />}
+        {event && idNumber && date && <CameraComponent registrar={false} />}
       </div>
     </div>
   );

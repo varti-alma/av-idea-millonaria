@@ -1,4 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
+import { useNavigate } from "@remix-run/react";
 import { Button } from "app/components/ui/button";
 import { Input } from "app/components/ui/input";
 import { Label } from "app/components/ui/label";
@@ -15,6 +16,7 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   const [registrar, setRegistrar] = useState(false);
   const [optionSelected, setOptionSelected] = useState(false);
+  const navigate = useNavigate();
   return (
     <div className="flex h-screen items-center justify-center">
       <div className="flex flex-col items-center gap-16">
@@ -41,7 +43,6 @@ export default function Index() {
             </>
           ) : (
             <>
-              <p>validación de persona</p>
               <Button
                 variant="secondary"
                 onClick={() => {
@@ -58,6 +59,7 @@ export default function Index() {
               onClick={() => {
                 setRegistrar(false);
                 setOptionSelected(true);
+                navigate("/validate");
               }}
             >
               Validar ticket
