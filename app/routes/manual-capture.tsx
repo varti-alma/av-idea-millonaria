@@ -3,8 +3,6 @@ import { Button } from "app/components/ui/button";
 import { Input } from "app/components/ui/input";
 import { Label } from "app/components/ui/label";
 import { AlertDialog } from "app/components/ui/alert-dialog";
-import { useEffect, useRef, useState } from "react";
-import CameraComponent from "~/components/CameraComponent";
 
 export const meta: MetaFunction = () => {
   return [
@@ -30,14 +28,13 @@ export default function Index() {
         <header className="flex flex-col items-center gap-9">
           <img src="logo_audienceview.webp" alt="AudienceView" width="300" />
           <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
-            Captura de cédula
+            Start validation
           </h1>
         </header>
-        <div>
-          <Button onClick={captureFace}>Capture</Button>
-        </div>
+        <Label> hola </Label>
+        <Input />
         <AlertDialog />
-        <CameraComponent />
+        <Button onClick={captureFace}>Capture</Button>
       </div>
     </div>
   );
