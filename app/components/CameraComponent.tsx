@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button } from "app/components/ui/button";
+import { CameraOff } from "lucide-react";
 
 function CameraComponent() {
   const videoRef = useRef(null);
@@ -7,6 +8,7 @@ function CameraComponent() {
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [photoTaken, setPhotoTaken] = useState(false);
   const [validation, setValidation] = useState(false);
+  const [capturaAutorizada, setcapturaAutorizada] = useState(false);
 
   const startCamera = async () => {
     try {
@@ -14,6 +16,7 @@ function CameraComponent() {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       videoRef.current.srcObject = stream;
     } catch (err) {
+      setIsCameraOn(false);
       console.error("Error accessing the camera: ", err);
     }
   };
@@ -45,6 +48,13 @@ function CameraComponent() {
 
   return (
     <div className="flex flex-col items-center justify-center">
+      {!isCameraOn && (
+        <h3 className="mb-5">
+          <strong>Importante:</strong> Debe autorizar el uso de la cámara para
+          continuar.
+        </h3>
+      )}
+
       {isCameraOn && !photoTaken ? (
         <div className="flex flex-col">
           <video
