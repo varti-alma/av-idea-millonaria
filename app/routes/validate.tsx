@@ -13,11 +13,14 @@ import { cn } from "~/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "~/components/ui/calendar";
 import { es } from "date-fns/locale";
+import { useNavigate } from "@remix-run/react";
 
 const Validate = () => {
   const [event, setEvent] = React.useState<string>();
   const [idNumber, setIdNumber] = React.useState<string>();
   const [date, setDate] = React.useState<Date>();
+
+  const navigate = useNavigate();
 
   return (
     <div className="flex h-screen items-center justify-center">
@@ -64,15 +67,13 @@ const Validate = () => {
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={setDate}
-              initialFocus
-            />
+            <Calendar mode="single" selected={date} onSelect={setDate} />
           </PopoverContent>
         </Popover>
         {event && idNumber && date && <CameraComponent registrar={false} />}
+        <Button variant="outline" onClick={() => navigate(-1)}>
+          Volver
+        </Button>
       </div>
     </div>
   );
