@@ -55,13 +55,15 @@ function CameraComponent() {
           />
           <div className="flex justify-around my-2">
             <Button onClick={capturePhoto}>Tomar foto</Button>
-            <Button onClick={stopCamera}>Validar imagen</Button>
+            <Button onClick={stopCamera}>Cancelar</Button>
           </div>
         </div>
       ) : photoTaken ? (
-        <Button onClick={validarFoto} className="mx-auto">
-          Validar
-        </Button>
+        <div className="flex justify-around">
+          <Button onClick={validarFoto} className="mx-auto">
+            Validar registro
+          </Button>
+        </div>
       ) : (
         <Button onClick={startCamera} className="mx-auto">
           Iniciar captura
@@ -70,8 +72,8 @@ function CameraComponent() {
 
       <div>
         {photoTaken && (
-          <div>
-            <h2>Foto tomada:</h2>
+          <div className="text-center my-4">
+            <h2>Imagen capturada:</h2>
           </div>
         )}
         <canvas ref={canvasRef} style={{ width: "100%" }}></canvas>
