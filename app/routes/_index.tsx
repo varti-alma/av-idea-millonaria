@@ -21,9 +21,11 @@ export default function Index() {
       <div className="flex flex-col items-center gap-16">
         <header className="flex flex-col items-center gap-9">
           <img src="logo_audienceview.webp" alt="AudienceView" width="300" />
-          <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
-            ¿Qué deseas hacer?
-          </h1>
+          {!optionSelected && (
+            <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
+              ¿Qué deseas hacer?
+            </h1>
+          )}
         </header>
         {optionSelected ? (
           registrar ? (
