@@ -1,7 +1,10 @@
-import { drizzle } from 'drizzle-orm/better-sqlite3';
-import Database from 'better-sqlite3';
-import * as schema from './schema'; // Aquí irán tus modelos definidos
+import { drizzle } from 'drizzle-orm/vercel-postgres';
+import {sql} from '@vercel/postgres'
+import * as schema from './schema';
+import {config} from 'dotenv';
 
-// Conexión a la base de datos SQLite
-const sqlite = new Database('data/liveness.db'); // Asegúrate de que esta ruta sea correcta
-export const db = drizzle(sqlite, { schema });
+config({
+    path:'.env'
+});
+
+export const db = drizzle(sql, { schema });
