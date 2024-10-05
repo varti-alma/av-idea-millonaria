@@ -11,6 +11,12 @@ body {
   }
 }
 
+@font-face {
+  font-family: "Poppins";
+  font-weight: 400;
+  src: url("/app/fonts/Poppins-Regular.woff2") format("woff2");
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -73,5 +79,8 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+  html {
+    font-family: "Poppins", sans-serif;
   }
 }
