@@ -1,14 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "app/components/ui/button";
-import { CameraOff } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "~/components/ui/alert-dialog";
 
-function CameraComponent() {
+function CameraComponent({ registrar }: { registrar: boolean }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [photoTaken, setPhotoTaken] = useState(false);
   const [validation, setValidation] = useState(false);
-  const [capturaAutorizada, setcapturaAutorizada] = useState(false);
 
   const startCamera = async () => {
     try {
@@ -42,8 +51,13 @@ function CameraComponent() {
   };
 
   const validarFoto = () => {
-    alert("validando");
+    registrar ? alert("Guardando..") : alert("Validando...");
     setValidation(true);
+    if (validation) {
+      alert("Registro guardado exitosamente");
+    } else {
+      alert("Error en almacenar registro. ¿Desea registrarse manualmente?");
+    }
   };
 
   return (
@@ -71,7 +85,7 @@ function CameraComponent() {
       ) : photoTaken ? (
         <div className="flex justify-around">
           <Button onClick={validarFoto} className="mx-auto">
-            Validar registro
+            {registrar ? "Guardar" : "Validar"} registro
           </Button>
         </div>
       ) : (
@@ -88,6 +102,22 @@ function CameraComponent() {
         )}
         <canvas ref={canvasRef} style={{ width: "100%" }}></canvas>
       </div>
+      <AlertDialog>
+        <AlertDialogTrigger>Open</AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction>Continue</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
