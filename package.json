@@ -68,7 +68,20 @@
     "typescript": "^5.1.6",
     "vite": "^5.1.0",
     "vite-tsconfig-paths": "^4.2.1"
-  },  
+  },
+  "vercel":{
+    "version": 2,
+    "builds": [
+      {
+        "src": "servidor.js",
+        "use": "@vercel/node",
+        "config": { "includeFiles": ["public/**", "build/**"] }
+      }
+    ],
+    "routes": [
+      { "src": "/(.*)", "dest": "servidor.js" }
+    ]
+  } ,
   "engines": {
     "node": ">=20.0.0"
   }
