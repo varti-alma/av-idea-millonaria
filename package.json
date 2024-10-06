@@ -44,6 +44,7 @@
     "react-dom": "^18.2.0",
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7",
+    "tesseract.js": "^5.1.1",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
@@ -68,6 +69,19 @@
     "vite": "^5.1.0",
     "vite-tsconfig-paths": "^4.2.1"
   },
+  "vercel":{
+"builds":[{
+  "src":"./servidor.js",
+  "use": "@vercel/node"
+}],
+"routes": [
+  {
+    "src": "/upload",
+    "dest": "./servidor.js"
+  }
+]
+  },
+  
   "engines": {
     "node": ">=20.0.0"
   }
