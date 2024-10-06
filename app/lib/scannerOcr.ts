@@ -18,19 +18,23 @@ const clearOCRText = (text: string) => {
     console.log('Texto limpiado:', clearedText);
     return clearedText;
   };
+
   const extractName = (text: string) => {
-    // Vamos a buscar "APELLIDOS" o algo cercano y luego nombres
-    const namePattern = /(APELLIDOS?|APELIDOS?)\s*([A-Z]+)\s+([A-Z]+)\s*(NOMBRES?|NOMBRE? 3)?\s*([A-Z]+)/i;
+    // Modificamos el patrón para capturar apellidos y nombres incluso con deformaciones
+    const namePattern = /APELLIDOS?\s*([A-Z]+)\s+([A-Z]+)\s*NOMBRES?\s*\d?\s*([A-Z]+)/i;
     const match = text.match(namePattern);
     console.log('Nombre detectado:', match);
     if (match) {
-      const [_, , lastName1, lastName2, , firstName] = match;
+      const lastName1 = match[1] || ""; 
+      const lastName2 = match[2] || "";
+      const firstName = match[3] || ""; 
       return { firstName, lastName1, lastName2 };
     }
     return null;
   };
+  
+  
   const extractBirthDate = (text: string) => {
-    // Buscar fecha en formato DDMMMYYYY
     const birthDatePattern = /FECHADENACIMIENTO?.*?(\d{2}[A-Z]{3}\d{4})/i;
     const match = text.match(birthDatePattern);
     if (match) {
@@ -38,8 +42,8 @@ const clearOCRText = (text: string) => {
     }
     return null;
   };
-  const extractDocumentNumber = (text: string) => {
-    // Buscar el RUN con formato chileno (NN.NNN.NNN-D)
+
+ const extractDocumentNumber = (text: string) => {
     const documentNumberPattern = /RUN\s*(\d{1,2}\.\d{3}\.\d{3}-\d{1})/;
     const match = text.match(documentNumberPattern);
     if (match) {
@@ -47,27 +51,33 @@ const clearOCRText = (text: string) => {
     }
     return null;
   };
+
   const extractSerialNumber = (text: string) => {
-    // Buscar un patrón numérico para el número de documento
-    const serialNumberPattern = /(DOCUMENTO|NUMERODOCUMENTO)\s*([\d\.]+)/i;
+    const serialNumberPattern = /(\d{3}\.\d{3}\.\d{3})/;
     const match = text.match(serialNumberPattern);
     console.log('Serial number detectado:', match);
     if (match) {
-      return match[2];
+      return match[1];
     }
     return null;
   };
+
   const extractNationalityAndSex = (text: string) => {
-    // Flexibilidad para encontrar nacionalidad y sexo
-    const pattern = /(NACIONALIDAD|NACIONA)\s*([A-Z]+)\s*(SEXO|EXO)\s*([A-Z]+)\s*(CHILENA|CHILEN)\s*/i;
+    // Hacemos la expresión más flexible para tolerar errores en "NACIONALIDAD" y "SEXO"
+    const pattern = /(NACIONALIDAD|NACIONA)\s*[A-Z]*\s*(CHILENA)\s*(SEXO|SEX)?\s*[A-Z]*\s*(M|F)/i;
     const match = text.match(pattern);
     console.log('Nacionalidad y sexo detectados:', match);
     if (match) {
-      const [_, , nationality, , gender] = match;
+      const nationality = match[2] || "CHILENA"; // Predeterminado "CHILENA"
+      const gender = match[4] || "M"; // Predeterminado "M"
       return { nationality, gender };
     }
     return null;
   };
+  
+  
+  
+
 const cleanedText = clearOCRText(text);
 const valuesDocument = {
     name : extractName(cleanedText),
