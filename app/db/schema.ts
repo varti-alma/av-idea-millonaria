@@ -3,7 +3,7 @@ import {
   pgTable,
   text,
   boolean,
-  timestamp ,
+  timestamp,
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 
@@ -15,7 +15,7 @@ export const users = pgTable(
     name: text("name").notNull(),
     lastName: text("lastName").notNull(),
     surName: text("surName").notNull(),
-    birthDate: timestamp("birthDate" ,{withTimezone: true}).notNull(),
+    birthDate: timestamp("birthDate", { withTimezone: true }).notNull(),
     gender: text("gender").notNull(),
     phone: text("phone").notNull(),
     serial_number: text("serial_number").notNull(),
@@ -42,8 +42,8 @@ export const liveness = pgTable(
     id_user: text("id_user")
       .notNull()
       .references(() => users.id),
-    initialDate: timestamp("initialDate", {withTimezone: true}).notNull(),
-    finishDate: timestamp("finishDate", {withTimezone: true}).notNull(),
+    initialDate: timestamp("initialDate", { withTimezone: true }).notNull(),
+    finishDate: timestamp("finishDate", { withTimezone: true }).notNull(),
     result: boolean("result").notNull(),
     ip_address: text("ip_address").notNull(),
     token_session: text("token_session").notNull(),

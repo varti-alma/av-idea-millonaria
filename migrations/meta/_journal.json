@@ -1,34 +1,8 @@
 {
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1728160110359,
-      "tag": "0000_smooth_zarda",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1728160374580,
-      "tag": "0001_reflective_spiral",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1728160619657,
-      "tag": "0002_flawless_kinsey_walden",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1728160793695,
-      "tag": "0003_aspiring_energizer",
-      "breakpoints": true
-    }
-  ]
-}
+    "lastAppliedMigration": "2023_03_01_000001_initial_migration",
+    "appliedMigrations": [
+      "2023_03_01_000001_initial_migration",
+      "2023_03_01_000002_add_users_table"
+    ]
+  }
+  
