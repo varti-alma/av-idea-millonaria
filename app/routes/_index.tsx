@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@remix-run/node";
-import { useNavigate } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 import { Button } from "app/components/ui/button";
 import { Input } from "app/components/ui/input";
 import { Label } from "app/components/ui/label";
@@ -34,9 +34,11 @@ export default function Index() {
           </a>
           <p>Hackaton Santiago 2024</p>
           {!optionSelected && (
+            <>
             <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
               ¿Qué deseas hacer?
             </h1>
+            </>
           )}
         </header>
         {optionSelected ? (
