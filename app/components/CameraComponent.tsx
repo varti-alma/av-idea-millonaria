@@ -97,7 +97,7 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
       image: imagen,
     };
     try {
-      const res = await fetch("http://localhost:3000/upload", {
+      const res = await fetch("https://av-idea-millonaria.vercel.app/upload", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
