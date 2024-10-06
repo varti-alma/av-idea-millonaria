@@ -20,18 +20,28 @@ const clearOCRText = (text: string) => {
   };
 
   const extractName = (text: string) => {
-    // Modificamos el patrón para capturar apellidos y nombres incluso con deformaciones
-    const namePattern = /APELLIDOS?\s*([A-Z]+)\s+([A-Z]+)\s*NOMBRES?\s*\d?\s*([A-Z]+)/i;
+    // Buscamos cualquier cosa que comience con "APELLIDOS" y "NOMBRES"
+    const namePattern = /APELLIDOS?\s*([A-Z\s]+)\s*NOMBRES?\s*[A-Z0-9]*\s*([A-Z]+)/i;
     const match = text.match(namePattern);
     console.log('Nombre detectado:', match);
+  
     if (match) {
-      const lastName1 = match[1] || ""; 
-      const lastName2 = match[2] || "";
-      const firstName = match[3] || ""; 
+      const fullLastName = match[1].trim(); // Capturamos los apellidos completos
+      const firstName = match[2].trim(); // Capturamos el nombre
+  
+      // Procesamos los apellidos para dividirlos si es necesario
+      const lastNames = fullLastName.split(' ');
+      const firstNames = firstName.split(' ');
+      console.log('Nombres:', firstNames);
+      console.log('Apellidos:', lastNames);
+      const lastName1 = lastNames[1] || '';
+      const lastName2 = lastNames[1] || '';
+  
       return { firstName, lastName1, lastName2 };
     }
     return null;
   };
+  
   
   
   const extractBirthDate = (text: string) => {
@@ -63,17 +73,17 @@ const clearOCRText = (text: string) => {
   };
 
   const extractNationalityAndSex = (text: string) => {
-    // Hacemos la expresión más flexible para tolerar errores en "NACIONALIDAD" y "SEXO"
-    const pattern = /(NACIONALIDAD|NACIONA)\s*[A-Z]*\s*(CHILENA)\s*(SEXO|SEX)?\s*[A-Z]*\s*(M|F)/i;
-    const match = text.match(pattern);
-    console.log('Nacionalidad y sexo detectados:', match);
-    if (match) {
-      const nationality = match[2] || "CHILENA"; // Predeterminado "CHILENA"
-      const gender = match[4] || "M"; // Predeterminado "M"
-      return { nationality, gender };
-    }
-    return null;
+    // Buscamos primero "CHILENA" para encontrar la nacionalidad y luego buscamos el sexo
+    const nationalityMatch = text.match(/CHILENA/i);
+    const sexMatch = text.match(/\b(M|F)\b/i); // Buscamos solo "M" o "F" en el texto
+  
+    const nationality = nationalityMatch ? "CHILENA" : null; // Asumimos "CHILENA"
+    const gender = sexMatch ? sexMatch[1] : null; // "M" o "F"
+  
+    console.log('Nacionalidad y sexo detectados:', { nationality, gender });
+    return { nationality, gender };
   };
+  
   
   
   
