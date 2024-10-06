@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import type { MetaFunction } from "@remix-run/node";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Button } from "app/components/ui/button";
 import { Input } from "app/components/ui/input";
 import { Label } from "app/components/ui/label";
@@ -13,7 +13,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "~/components/ui/alert-dialog";
-import { useNavigate } from "@remix-run/react";
+import { redirect, useNavigate } from "@remix-run/react";
+import { createUserLoader } from "~/db/request";
+import { json } from "stream/consumers";
+import { db } from "~/db/config.server";
+import { users } from "~/db/schema";
 
 export const meta: MetaFunction = () => {
   return [
@@ -21,6 +25,29 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData();
+  const newUser = {
+    id: "asdf",
+    document_number: "string",
+    name: "string",
+    lastName: "string",
+    surName: "string",
+    birthDate: new Date(),
+    gender: "string",
+    phone: "string",
+    register_date: new Date(),
+    country: "string",
+    email: "string",
+    password: "string",
+    serial_number: "string",
+  };
+  await db.insert(users).values(newUser);
+
+  return JSON.stringify({ message: "User created successfully" });
+};
+
 export default function Index() {
   const [validation, setValidation] = useState(true);
   const [registrar, setRegistrar] = useState(false);
@@ -57,7 +84,7 @@ export default function Index() {
             Ingreso del formulario para meter info del carnet
           </h1>
         </header>
-        <div>
+        <form method="post" action="/manual-capture">
           <div>
             <Label> RUT / Pasaporte</Label>
             <Input
@@ -79,7 +106,10 @@ export default function Index() {
               }}
             />
           </div>
-        </div>
+          <Button onClick={captureData} className="ml-5" type="submit">
+            Guardar
+          </Button>
+        </form>
         <div>
           <Button
             variant="secondary"
@@ -87,9 +117,6 @@ export default function Index() {
             onClick={() => navigate(-1)}
           >
             Volver
-          </Button>
-          <Button onClick={captureData} className="ml-5">
-            Guardar
           </Button>
         </div>
       </div>
