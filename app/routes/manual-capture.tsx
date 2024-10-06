@@ -21,7 +21,7 @@ import { users } from "~/db/schema";
 import { CameraIcon, FileIcon, UpdateIcon } from "@radix-ui/react-icons";
 import processImageWithOCR from "~/lib/scannerOcr";
 
-type DataScanner = { 
+type DataScanner = {
   name?: {
     firstName: string;
     lastName: string;
@@ -34,43 +34,46 @@ type DataScanner = {
     gender: string;
     nationality: string;
   };
-
-}
-
-export const meta: MetaFunction = () => {
-  return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
 };
 
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData();
-  try {
-    const newUser = {
-      id: "user-" + new Date(),
-      document_number: formData[0]?.value ?? "No data",
-      name: "string",
-      lastName: "string",
-      surName: "string",
-      birthDate: new Date(),
-      gender: "string",
-      phone: "string",
-      register_date: new Date(),
-      country: "string",
-      email: "string",
-      password: "string",
-      serial_number: formData[1]?.value ?? "No data",
-    };
-    await db.insert(users).values(newUser);
+// export const meta: MetaFunction = () => {
+//   return [
+//     { title: "New Remix App" },
+//     { name: "description", content: "Welcome to Remix!" },
+//   ];
+// };
 
-    return JSON.stringify({ message: "User created successfully" });
-  } catch (error) {
-    console.error("error", error);
-  }
-};
+// export const action = async ({ request }: ActionFunctionArgs) => {
+//   const formData = await request.formData();
+//   try {
+//     const newUser = {
+//       id: "user-" + new Date(),
+//       document_number: formData[0]?.value ?? "No data",
+//       name: "string",
+//       lastName: "string",
+//       surName: "string",
+//       birthDate: new Date(),
+//       gender: "string",
+//       phone: "string",
+//       register_date: new Date(),
+//       country: "string",
+//       email: "string",
+//       password: "string",
+//       serial_number: formData[1]?.value ?? "No data",
+//     };
+//     await db.insert(users).values(newUser);
 
-export default function Index() {
+//     return JSON.stringify({ message: "User created successfully" });
+//   } catch (error) {
+//     console.error("error", error);
+//   }
+// };
+
+// const  AddUser = async (newUser:any) => {
+//   await db.insert(users).values(newUser);
+// }
+
+export default function ManualCapture() {
   const [validation, setValidation] = useState(true);
   const [registrar, setRegistrar] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
@@ -79,29 +82,57 @@ export default function Index() {
   const [documentId, setDocumentId] = useState("");
   const [serialNumber, setSerialNumber] = useState("");
   const [proccessing, setIsProccessing] = useState(false);
-  const [fileLoaded, setFileLoaded] = useState('');
+  const [fileLoaded, setFileLoaded] = useState("");
   const [documentData, setDocumentData] = useState<DataScanner>();
 
   const navigate = useNavigate();
 
-  const captureData = () => {
+  const captureData = async () => {
     registrar ? alert("Guardando..") : alert("Validando...");
+    const { name, nationalityAndSex } = documentData as DataScanner;
+
+      const newUser = {
+        id: "user-" + new Date(),
+        document_number: documentId ? documentId : "No data",
+        name: name?.firstName ? name.firstName : "unknown",
+        lastName: name?.lastName ? name.lastName : "unknown",
+        surName: name?.lastNam2 ? name.lastNam2 : "unknown",
+        birthDate: new Date(),
+        gender: nationalityAndSex.gender ? nationalityAndSex.gender : "unknown",
+        phone: "string",
+        register_date: new Date(),
+        country: "string",
+        email: "string",
+        password: "string",
+        serial_number: serialNumber ? serialNumber : "No data",
+      };
+      // AddUser(newUser);
+      setValidation(true);
+      setDialogTitle("Registro guardado exitosamente");
+      setDialogMessage("Registro guardado exitosamente");
+      setDialogTitle("Error al guardar registro");
+      setDialogMessage(
+        "Error en almacenar registro. ¿Desea registrarse manualmente?"
+      );
+      setShowDialog(true);
+    
+
     //aca va a invocación de la api de guardado a la base de datos
     if (validation) {
       setValidation(true);
       setDialogTitle("Registro guardado exitosamente");
       setDialogMessage("Registro guardado exitosamente");
-    } else {
-      setDialogTitle("Error al guardar registro");
-      setDialogMessage(
-        "Error en almacenar registro. ¿Desea registrarse manualmente?"
-      );
     }
-    setShowDialog(true);
+    //  else {
+    //   setDialogTitle("Error al guardar registro");
+    //   setDialogMessage(
+    //     "Error en almacenar registro. ¿Desea registrarse manualmente?"
+    //   );
+  
   };
 
-  const base64ToBlob = (base64: string, mimeType: string = 'image/png') => {
-    const byteString = atob(base64.split(',')[1]);
+  const base64ToBlob = (base64: string, mimeType: string = "image/png") => {
+    const byteString = atob(base64.split(",")[1]);
     const arrayBuffer = new ArrayBuffer(byteString.length);
     const uint8Array = new Uint8Array(arrayBuffer);
 
@@ -112,79 +143,81 @@ export default function Index() {
     return new Blob([uint8Array], { type: mimeType });
   };
 
-  const processOCR = async (image:Blob) => {
-    console.log('Procesando OCR...');
+  const processOCR = async (image: Blob) => {
+    console.log("Procesando OCR...");
     setIsProccessing(true);
-    if(!(image instanceof Blob)) {
-        console.error('EL objecto no es un Blob',image);
-        return;
+    if (!(image instanceof Blob)) {
+      console.error("EL objecto no es un Blob", image);
+      return;
     }
     const imageURL = URL.createObjectURL(image);
-     const {valuesDocument} = await processImageWithOCR("spa", imageURL);
-     //@ts-ignore
-     setDocumentData(valuesDocument);
-     URL.revokeObjectURL(imageURL);
-     setIsProccessing(false);
-     setFileLoaded('Imagen cargada exitosamente');
-}
+    const { valuesDocument } = await processImageWithOCR("spa", imageURL);
+    //@ts-ignore
+    setDocumentData(valuesDocument);
+    URL.revokeObjectURL(imageURL);
+    setIsProccessing(false);
+    setFileLoaded("Imagen cargada exitosamente");
+  };
 
-const convertToGrayscale = (image: HTMLImageElement) => {
-  const canvas = document.createElement('canvas');
-  const context= canvas.getContext('2d');
-  canvas.width = image.width;
-  canvas.height = image.height;
-  context?.drawImage(image, 0, 0, image.width, image.height);
-  const imageData = context?.getImageData(0, 0, image.width, image.height);
-  const data = imageData?.data;
-  if(data){
+  const convertToGrayscale = (image: HTMLImageElement) => {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    canvas.width = image.width;
+    canvas.height = image.height;
+    context?.drawImage(image, 0, 0, image.width, image.height);
+    const imageData = context?.getImageData(0, 0, image.width, image.height);
+    const data = imageData?.data;
+    if (data) {
       for (let i = 0; i < data.length; i += 4) {
-          const r = data[i];
-          const g = data[i + 1];
-          const b = data[i + 2];
-          const grayscale = (r+g+b)/3;
-          data[i] = data[i+1] = data[i+2] = grayscale;
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const grayscale = (r + g + b) / 3;
+        data[i] = data[i + 1] = data[i + 2] = grayscale;
       }
       context?.putImageData(imageData, 0, 0);
-  }
-  const grayscaleDataURL = canvas.toDataURL('image/png');
+    }
+    const grayscaleDataURL = canvas.toDataURL("image/png");
 
-  return grayscaleDataURL;
-}
-
+    return grayscaleDataURL;
+  };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onloadend =  () => {
-            const image = new Image();
-            image.src = reader.result as string;
-            image.onload = () => {
-                const grayscaleImage = convertToGrayscale(image);
-                const blobImage = base64ToBlob(grayscaleImage);
-                processOCR(blobImage);
-            }
-            
-            };
-        reader.readAsDataURL(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const image = new Image();
+        image.src = reader.result as string;
+        image.onload = () => {
+          const grayscaleImage = convertToGrayscale(image);
+          const blobImage = base64ToBlob(grayscaleImage);
+          processOCR(blobImage);
+        };
+      };
+      reader.readAsDataURL(file);
     }
-};
+  };
 
-useEffect(() => {
-  if(documentData){
-    const documentNumber = documentData?.documentNumber.replace(/[.]/g, '');
-    const documentNumberFormat= documentNumber.replace(/[-]/g,'');
-    setDocumentId(documentNumberFormat);
-    const serialNumnberUnformatted = documentData?.serialNumber.replace(/[.]/g, '');
-    setSerialNumber(serialNumnberUnformatted);
-  }
-}, [documentData])
-
+  useEffect(() => {
+    if (documentData) {
+      const { documentNumber, serialNumber } = documentData;
+      const documentNumberUnformatted =
+        documentNumber !== null ? documentNumber.replace(/[.]/g, "") : "";
+      const documentNumberFormat =
+        documentNumberUnformatted !== null
+          ? documentNumberUnformatted.replace(/[-]/g, "")
+          : "";
+      setDocumentId(documentNumberFormat);
+      const serialNumberUnformatted = serialNumber.replace(/[.]/g, "");
+      setSerialNumber(serialNumberUnformatted);
+    }
+  }, [documentData]);
 
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="flex flex-col items-center gap-16">
-        <header className="flex flex-col items-center gap-3 mt-10">
+        {/* <header className="flex flex-col items-center gap-3 mt-10">
           <a rel="stylesheet" href="/">
             <img src="logo_audienceview.webp" alt="AudienceView" width="300" />
           </a>
@@ -192,8 +225,8 @@ useEffect(() => {
           <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
             Formulario de ingreso manual
           </h1>
-        </header>
-        <form method="post" action="/manual-capture">
+        </header> */}
+        <form >
           <div>
             <Label> RUT / Pasaporte</Label>
             <div className="flex flex-row justify-center items-center">
@@ -207,17 +240,34 @@ useEffect(() => {
                   }}
                 />
               </div>
-              <div className={`flex justify-center items-center rounded-sm shadow-sm ${proccessing ? 'bg-gray-300' : 'bg-purple-800'}`}>
-                <Label children={ proccessing ? <UpdateIcon className="animate-spin text-white w-4 h-4"/>  : <CameraIcon className=" text-white w-4 h-4"/>} className={` ${proccessing ?'hover:cursor-not-allowed':'hover:cursor-pointer'} p-4 ` }htmlFor="scannerDocument"  />
+              <div
+                className={`flex justify-center items-center rounded-sm shadow-sm ${
+                  proccessing ? "bg-gray-300" : "bg-purple-800"
+                }`}
+              >
+                <Label
+                  children={
+                    proccessing ? (
+                      <UpdateIcon className="animate-spin text-white w-4 h-4" />
+                    ) : (
+                      <CameraIcon className=" text-white w-4 h-4" />
+                    )
+                  }
+                  className={` ${
+                    proccessing
+                      ? "hover:cursor-not-allowed"
+                      : "hover:cursor-pointer"
+                  } p-4 `}
+                  htmlFor="scannerDocument"
+                />
                 <Input
-                className="sr-only"
-                disabled={proccessing}
-                id="scannerDocument"
+                  className="sr-only"
+                  disabled={proccessing}
+                  id="scannerDocument"
                   type="file"
                   accept="image/*"
                   onChange={handleImageUpload}
                 />
-                
               </div>
             </div>
             {fileLoaded && <p className="text-green-600">{fileLoaded}</p>}
@@ -232,11 +282,13 @@ useEffect(() => {
               }}
             />
           </div>
-          <Button onClick={captureData} className="ml-5" type="submit">
-            Guardar
-          </Button>
+          {/* <div className="flex justify-center">
+            <Button onClick={captureData} className="ml-5 mt-4">
+              Guardar
+            </Button>
+          </div> */}
         </form>
-        <div>
+        {/* <div>
           <Button
             variant="secondary"
             className="mt-5"
@@ -244,7 +296,7 @@ useEffect(() => {
           >
             Volver
           </Button>
-        </div>
+        </div> */}
       </div>
       <AlertDialog open={showDialog}>
         <AlertDialogContent>

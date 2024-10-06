@@ -5,6 +5,7 @@ import { Input } from "app/components/ui/input";
 import { Label } from "app/components/ui/label";
 import { useEffect, useRef, useState } from "react";
 import CameraComponent from "~/components/CameraComponent";
+import ManualCapture from "./manual-capture";
 
 export const meta: MetaFunction = () => {
   return [
@@ -44,29 +45,7 @@ export default function Index() {
         {optionSelected ? (
           registrar ? (
             <>
-              <form method="post" action="/manual-capture">
-                <div>
-                  <Label> RUT / Pasaporte</Label>
-                  <Input
-                    value={documentId}
-                    name="documentId"
-                    placeholder="Ingrese su rut sin puntos ni guión"
-                    onChange={(e) => {
-                      setDocumentId(e.target.value);
-                    }}
-                  />
-                </div>
-                <div className="mt-5">
-                  <Label> Número de seguridad </Label>
-                  <Input
-                    value={serialNumber}
-                    name="securityNumber"
-                    onChange={(e) => {
-                      setSerialNumber(e.target.value);
-                    }}
-                  />
-                </div>
-              </form>
+              <ManualCapture/>
 
               <CameraComponent registrar={registrar} />
               <Button

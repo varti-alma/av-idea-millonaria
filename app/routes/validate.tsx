@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import { Calendar } from "~/components/ui/calendar";
 import { es } from "date-fns/locale";
 import { useNavigate } from "@remix-run/react";
+import ManualCapture from "./manual-capture";
 
 const Validate = () => {
   const [event, setEvent] = React.useState<string>();
@@ -44,13 +45,14 @@ const Validate = () => {
           />
         </div>
         <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label htmlFor="id-number">Identificación</Label>
+          {/* <Label htmlFor="id-number">Identificación</Label>
           <Input
             type="text"
             id="id-number"
             placeholder="Ingresa tu RUT"
             onChange={(e) => setIdNumber(e.target.value)}
-          />
+          /> */}
+          <ManualCapture/>
         </div>
         <Popover>
           <PopoverTrigger asChild>

@@ -167,10 +167,9 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
         <div className="flex justify-around">
           <Button
             onClick={() => {
-              setIsLoading(true);
               registrar
-                ? void apiUploadImage(photoTaken)
-                : void apiValidateImage(photoTaken);
+              ? apiUploadImage(photoTaken)
+              : apiValidateImage(photoTaken)
             }}
             className="mx-auto"
             disabled={isLoading}
