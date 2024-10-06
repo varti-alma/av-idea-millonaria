@@ -58,7 +58,7 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
 
   const [response, setResponse] = useState(null);
 
-  const sendImageToApi = async (imgvalidacion) => {
+  const apiValidateImage = async (imgvalidacion) => {
     try {
         const res = await fetch("https://y3yoims0y3.execute-api.us-east-2.amazonaws.com/PruebaReconocimiento", {
             method: "POST",
@@ -71,15 +71,69 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
         const data = await res.json();
         console.log("Solicitud enviada");
         console.log(data);
-        setResponse(data);
-        console.log(response);
 
         // Verificar la respuesta
         if (data.body.codigo === 0) {
-            alert("Usted es: " + data.body.similutud);
+            //alert("Usted es: " + data.body.similutud);
+            console.log("Respuesta Correcta");
+            setValidation(true);
+            alert(data.body.similutud + " Validado Correctamente");
+            setDialogTitle(data.body.similutud + " Validado Correctamente");
+            setDialogMessage(data.body.similutud + " Validado Correctamente");
         } else {
-            alert("Error: " + data.body.descripcion);
+            //alert("Error: " + data.body.descripcion);
+            console.log("Respuesta Erronea");
+            setShowDialog(true);
+            setDialogTitle("Persona NO Validada");
+            setDialogMessage(
+              "Persona NO Validada. ¿Desea registrarse manualmente?"
+            );
         }
+    } catch (error) {
+        console.error("Error al enviar la solicitud:", error);
+    }
+  };
+
+  const [name, setName] = useState("");
+  const [imagen, setImagen] = useState("");
+
+  const apiUploadImage = async (imagen:any) => {
+    const value = {
+      name: 'uploadedImage',
+      image: imagen
+    }
+    console.log("Value:" ,value);
+    console.log("Json Value: ", JSON.stringify(value))
+    try {
+        const res = await fetch("http://localhost:3000/upload", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            //mode: "no-cors",
+            body: JSON.stringify(value)
+            //body: value
+        });
+        console.log(res.body);
+        const data = await res.json();
+        console.log("Solicitud enviada");
+        console.log(data);
+
+        // Verificar la respuesta
+        if (data.status === 200) {
+          console.log("Respuesta Correcta");
+          setValidation(true);
+          alert("Registro Correcto");
+          setDialogTitle("Registro Correcto");
+          setDialogMessage("Registro Correcto");
+      } else {
+          console.log("Respuesta Erronea");
+          setShowDialog(true);
+          setDialogTitle("NO se pudo registrar persona");
+          setDialogMessage(
+            "NO se pudo registrar persona. ¿Desea registrarse manualmente?"
+          );
+      }
     } catch (error) {
         console.error("Error al enviar la solicitud:", error);
     }
@@ -87,10 +141,10 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
 
   const validarFoto = () => {
     //registrar ? alert("Guardando..") : alert("Validando...");
-    console.log(photoTaken);
-    registrar ? alert("Guardando..") : sendImageToApi(photoTaken);
+    console.log("Foto1: ", photoTaken);
+    registrar ? apiUploadImage(photoTaken) : apiValidateImage(photoTaken);
     //aca va a invocación de la api de guardado de imagen
-    if (validation) {
+    /*if (validation) {
       setValidation(true);
       alert("Registro guardado exitosamente");
       setDialogTitle("Registro guardado exitosamente");
@@ -101,7 +155,7 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
       setDialogMessage(
         "Error en almacenar registro. ¿Desea registrarse manualmente?"
       );
-    }
+    }*/
   };
 
   const navigarManual = () => {
