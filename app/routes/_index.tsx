@@ -27,18 +27,6 @@ export default function Index() {
             <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
               ¿Qué deseas hacer?
             </h1>
-            
-              <Button asChild
-                variant="secondary"
-                onClick={() => {
-                  setOptionSelected(true);
-                  navigate("/document-scanner");
-                }}
-              >
-                  <Link to="/document-scanner">
-                Escanear documento
-              </Link>
-              </Button>
             </>
           )}
         </header>

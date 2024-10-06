@@ -13,7 +13,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "~/components/ui/alert-dialog";
-import { useNavigate } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -60,14 +60,30 @@ export default function Index() {
         <div>
           <div>
             <Label> RUT / Pasaporte</Label>
-            <Input
-              value={documentId}
-              name="documentId"
-              placeholder="Ingrese su rut sin puntos ni guión"
-              onChange={(e) => {
-                setDocumentId(e.target.value);
-              }}
-            />
+            <div className="flex flex-row justify-center items-center">
+              <div className="mr-5">
+                <Input
+                  value={documentId}
+                  name="documentId"
+                  placeholder="Ingrese su rut sin puntos ni guión"
+                  onChange={(e) => {
+                    setDocumentId(e.target.value);
+                  }}
+                />
+              </div>
+              <div>
+                <Input
+                className="w-[50px]"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+
+                  }}
+                >
+                </Input>
+              </div>
+            </div>
+            <div></div>
           </div>
           <div className="mt-5">
             <Label> Número de seguridad </Label>
