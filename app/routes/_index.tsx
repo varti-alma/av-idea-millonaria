@@ -16,12 +16,23 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   const [registrar, setRegistrar] = useState(false);
   const [optionSelected, setOptionSelected] = useState(false);
+  const [documentId, setDocumentId] = useState("");
+  const [serialNumber, setSerialNumber] = useState("");
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
+  const [dialogTitle, setDialogTitle] = useState("");
+  const [validation, setValidation] = useState(true);
+
   const navigate = useNavigate();
+
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="flex items-center justify-center">
       <div className="flex flex-col items-center gap-16">
-        <header className="flex flex-col items-center gap-9">
-          <img src="logo_audienceview.webp" alt="AudienceView" width="300" />
+        <header className="flex flex-col items-center gap-3 mt-10">
+          <a rel="stylesheet" href="/">
+            <img src="logo_audienceview.webp" alt="AudienceView" width="300" />
+          </a>
+          <p>Hackaton Santiago 2024</p>
           {!optionSelected && (
             <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
               ¿Qué deseas hacer?
@@ -31,6 +42,30 @@ export default function Index() {
         {optionSelected ? (
           registrar ? (
             <>
+              <form method="post" action="/manual-capture">
+                <div>
+                  <Label> RUT / Pasaporte</Label>
+                  <Input
+                    value={documentId}
+                    name="documentId"
+                    placeholder="Ingrese su rut sin puntos ni guión"
+                    onChange={(e) => {
+                      setDocumentId(e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="mt-5">
+                  <Label> Número de seguridad </Label>
+                  <Input
+                    value={serialNumber}
+                    name="securityNumber"
+                    onChange={(e) => {
+                      setSerialNumber(e.target.value);
+                    }}
+                  />
+                </div>
+              </form>
+
               <CameraComponent registrar={registrar} />
               <Button
                 variant="secondary"

@@ -44,15 +44,6 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
     setPhotoTaken(false);
   };
 
-  const initializeCanva = () => {
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const context = canvas.getContext("2d");
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-  };
-
   const capturePhoto = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -64,8 +55,6 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
     stopCamera();
     setPhotoTaken(photoData);
   };
-
-  const [response, setResponse] = useState(null);
 
   const apiValidateImage = async (imgvalidacion) => {
     try {
@@ -89,9 +78,7 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
         setShowDialog(true);
       } else {
         setDialogTitle("Persona NO Validada");
-        setDialogMessage(
-          "Persona NO Validada. ¿Desea registrarse manualmente?"
-        );
+        setDialogMessage("Persona no se encuentra registrada");
         setValidation(false);
         setShowDialog(true);
       }
@@ -205,20 +192,8 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
           <AlertDialogFooter>
             <AlertDialogCancel
               onClick={() => {
-                if (registrar) {
-                  navigate("/");
-                } else {
-                  navigate("/validate");
-                }
-                setIsCameraOn(false);
-                setPhotoTaken(false);
-                setValidation(false);
-                setShowDialog(false);
-                setDialogMessage("");
-                setDialogTitle("");
-                const canvas = canvasRef.current;
-                const context = canvas.getContext("2d");
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                location.reload();
+                debugger;
               }}
             >
               {validation ? "Cerrar" : "Cancelar"}

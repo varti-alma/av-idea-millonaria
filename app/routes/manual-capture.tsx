@@ -28,7 +28,6 @@ export const meta: MetaFunction = () => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
-  console.log(formData[0]);
   try {
     const newUser = {
       id: "user-" + new Date(),
@@ -83,10 +82,13 @@ export default function Index() {
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="flex flex-col items-center gap-16">
-        <header className="flex flex-col items-center gap-9">
-          <img src="logo_audienceview.webp" alt="AudienceView" width="300" />
+        <header className="flex flex-col items-center gap-3 mt-10">
+          <a rel="stylesheet" href="/">
+            <img src="logo_audienceview.webp" alt="AudienceView" width="300" />
+          </a>
+          <p>Hackaton Santiago 2024</p>
           <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
-            Ingreso del formulario para meter info del carnet
+            Formulario de ingreso manual
           </h1>
         </header>
         <form method="post" action="/manual-capture">
