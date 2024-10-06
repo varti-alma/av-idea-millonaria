@@ -32,10 +32,8 @@ const clearOCRText = (text: string) => {
       // Procesamos los apellidos para dividirlos si es necesario
       const lastNames = fullLastName.split(' ');
       const firstNames = firstName.split(' ');
-      console.log('Nombres:', firstNames);
-      console.log('Apellidos:', lastNames);
       const lastName1 = lastNames[1] || '';
-      const lastName2 = lastNames[1] || '';
+      const lastName2 = lastNames[2] || '';
   
       return { firstName, lastName1, lastName2 };
     }
@@ -76,7 +74,8 @@ const clearOCRText = (text: string) => {
     // Buscamos primero "CHILENA" para encontrar la nacionalidad y luego buscamos el sexo
     const nationalityMatch = text.match(/CHILENA/i);
     const sexMatch = text.match(/\b(M|F)\b/i); // Buscamos solo "M" o "F" en el texto
-  
+  console.log("Sexo detectado:", sexMatch);
+  console.log("Nacionalidad detectada:", nationalityMatch);
     const nationality = nationalityMatch ? "CHILENA" : null; // Asumimos "CHILENA"
     const gender = sexMatch ? sexMatch[1] : null; // "M" o "F"
   
