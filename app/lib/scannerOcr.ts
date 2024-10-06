@@ -73,10 +73,9 @@ const clearOCRText = (text: string) => {
   const extractNationalityAndSex = (text: string) => {
     // Buscamos primero "CHILENA" para encontrar la nacionalidad y luego buscamos el sexo
     const nationalityMatch = text.match(/CHILENA/i);
-    const sexMatch = text.match(/\b(M|F)\b/i); // Buscamos solo "M" o "F" en el texto
-  console.log("Sexo detectado:", sexMatch);
-  console.log("Nacionalidad detectada:", nationalityMatch);
-    const nationality = nationalityMatch ? "CHILENA" : null; // Asumimos "CHILENA"
+    const sexMatch = text.match(/SEXO\s*[^\w]*(M|F)/);
+
+    const nationality = nationalityMatch ? "CHILENA" : null; // Predeterminado "CHILENA"
     const gender = sexMatch ? sexMatch[1] : null; // "M" o "F"
   
     console.log('Nacionalidad y sexo detectados:', { nationality, gender });
