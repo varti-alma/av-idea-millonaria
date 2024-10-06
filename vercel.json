@@ -1,0 +1,16 @@
+{
+    "version": 3,
+    "builds": [
+     {
+      "src": "servidor.js",
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["dist/**"] }
+     }
+    ],
+    "routes": [
+     {
+      "src": "/upload",
+      "dest": "servidor.js"
+     }
+    ]
+   }
