@@ -28,24 +28,29 @@ export const meta: MetaFunction = () => {
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
-  const newUser = {
-    id: "asdf",
-    document_number: "string",
-    name: "string",
-    lastName: "string",
-    surName: "string",
-    birthDate: new Date(),
-    gender: "string",
-    phone: "string",
-    register_date: new Date(),
-    country: "string",
-    email: "string",
-    password: "string",
-    serial_number: "string",
-  };
-  await db.insert(users).values(newUser);
+  console.log(formData[0]);
+  try {
+    const newUser = {
+      id: "user-" + new Date(),
+      document_number: formData[0]?.value ?? "No data",
+      name: "string",
+      lastName: "string",
+      surName: "string",
+      birthDate: new Date(),
+      gender: "string",
+      phone: "string",
+      register_date: new Date(),
+      country: "string",
+      email: "string",
+      password: "string",
+      serial_number: formData[1]?.value ?? "No data",
+    };
+    await db.insert(users).values(newUser);
 
-  return JSON.stringify({ message: "User created successfully" });
+    return JSON.stringify({ message: "User created successfully" });
+  } catch (error) {
+    console.error("error", error);
+  }
 };
 
 export default function Index() {

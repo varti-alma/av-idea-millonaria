@@ -71,7 +71,7 @@ const Validate = () => {
           </PopoverContent>
         </Popover>
         {event && idNumber && date && <CameraComponent registrar={false} />}
-        <Button variant="outline" onClick={() => navigate(-1)}>
+        <Button variant="outline" onClick={() => navigate("/")}>
           Volver
         </Button>
       </div>
