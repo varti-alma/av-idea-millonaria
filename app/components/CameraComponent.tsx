@@ -11,10 +11,12 @@ import {
   AlertDialogTitle,
 } from "~/components/ui/alert-dialog";
 import { useNavigate } from "@remix-run/react";
+import { Loader } from "lucide-react";
 
 function CameraComponent({ registrar }: { registrar: boolean }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [isCameraOn, setIsCameraOn] = useState(false);
   const [photoTaken, setPhotoTaken] = useState(false);
   const [validation, setValidation] = useState(false);
@@ -76,11 +78,13 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
         setDialogMessage(" Validado Correctamente");
         setValidation(true);
         setShowDialog(true);
+        setIsLoading(false);
       } else {
         setDialogTitle("Persona NO Validada");
         setDialogMessage("Persona no se encuentra registrada");
         setValidation(false);
         setShowDialog(true);
+        setIsLoading(false);
       }
     } catch (error) {
       setDialogTitle("Error al enviar la solicitud");
@@ -96,6 +100,7 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
       name: "uploadedImage",
       image: imagen,
     };
+
     try {
       console.log(window.location.origin);
       const baseURL =
@@ -161,13 +166,16 @@ function CameraComponent({ registrar }: { registrar: boolean }) {
       ) : photoTaken ? (
         <div className="flex justify-around">
           <Button
-            onClick={
+            onClick={() => {
+              setIsLoading(true);
               registrar
-                ? apiUploadImage(photoTaken)
-                : apiValidateImage(photoTaken)
-            }
+                ? void apiUploadImage(photoTaken)
+                : void apiValidateImage(photoTaken);
+            }}
             className="mx-auto"
+            disabled={isLoading}
           >
+            {isLoading && <Loader className="animate-spin h-5 w-5 mr-3" />}
             {registrar ? "Guardar" : "Validar"} registro
           </Button>
         </div>
