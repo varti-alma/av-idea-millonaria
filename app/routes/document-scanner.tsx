@@ -12,6 +12,7 @@ import processImageWithOCR from '~/lib/scannerOcr';
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [isProccessing, setIsProccessing] = useState(false);
     const [stability, setStability] = useState(0);
+    const [documentData, setDocumentData] = useState({});
     const [capturedImage, setCapturedImage] = useState('');
     const [previousFrame, setPreviousFrame] = useState<ImageData | null>(null);
     const [isMobileDevice, setIsMobileDevice] = useState(false);
@@ -151,15 +152,15 @@ import processImageWithOCR from '~/lib/scannerOcr';
     const processOCR = async (image:Blob) => {
         setIsProccessing(true);
         console.log('Procesando OCR...');
-        console.log('Que recibo aqui?', image);
         if(!(image instanceof Blob)) {
             console.error('EL objecto no es un Blob',image);
             return;
         }
         const imageURL = URL.createObjectURL(image);
-        console.log("URL de la imagen creada:", imageURL);
-        await processImageWithOCR("spa", imageURL);
+         const {valuesDocument} = await processImageWithOCR("spa", imageURL);
+         setDocumentData(valuesDocument);
         URL.revokeObjectURL(imageURL);
+
 
         setIsProccessing(false);
         console.log('Procesamiento finalizado.');
